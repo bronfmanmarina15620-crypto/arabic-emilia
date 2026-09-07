@@ -1,0 +1,803 @@
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>ערבית של אמיליה</title>
+<style>
+  :root{
+    --bg:#fdf7f2; --card:#ffffff; --ink:#33303c; --muted:#8a8496;
+    --pink:#ff7aa8; --pink-d:#e85f8e; --mint:#2fbf9b; --sky:#5aa9f7;
+    --sun:#ffc75a; --bad:#ef5f6b; --line:#efe7e0;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;height:100%}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Rubik,Arial,sans-serif;
+    display:flex; flex-direction:column; min-height:100%;
+  }
+  .wrap{flex:1; display:flex; flex-direction:column; max-width:520px; margin:0 auto; width:100%; padding:14px 16px 20px}
+  .top{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px}
+  .hello{font-size:17px; font-weight:700}
+  .hello span{color:var(--pink-d)}
+  .ghost{
+    background:#fff; border:1px solid var(--line); color:var(--muted);
+    border-radius:999px; padding:7px 13px; font-size:13px; font-weight:600; cursor:pointer;
+  }
+  .stats{display:flex; gap:8px; margin:8px 0 4px}
+  .chip{
+    flex:1; background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:9px 6px; text-align:center;
+  }
+  .chip b{display:block; font-size:18px; line-height:1.2}
+  .chip small{color:var(--muted); font-size:11px}
+  .sync{text-align:center; color:var(--muted); font-size:11px; min-height:16px; margin:0 0 10px; font-weight:500}
+  .qcard{
+    background:var(--card); border:1px solid var(--line); border-radius:26px;
+    padding:20px 16px; text-align:center; box-shadow:0 6px 18px rgba(80,60,70,.05);
+  }
+  .prompt{font-size:16px; font-weight:700; color:var(--ink); margin-bottom:12px; line-height:1.4}
+  .stim{
+    font-size:clamp(42px,14vw,64px); font-weight:700; line-height:1.35;
+    margin:8px 0 6px; padding:10px 8px; border-radius:18px; background:#fffdfa;
+    border:1px dashed var(--line); min-height:72px; display:flex; align-items:center; justify-content:center;
+    font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic","Amiri",Arial,sans-serif;
+    direction:rtl; unicode-bidi:isolate;
+  }
+  .gloss{color:var(--muted); font-size:13px; font-weight:600; min-height:18px; margin-bottom:4px}
+  .msg{min-height:28px; margin-top:10px; font-size:16px; font-weight:700}
+  .msg.ok{color:var(--mint)} .msg.no{color:var(--bad)}
+  .msg small{display:block; color:var(--muted); font-weight:600; font-size:13px; margin-top:2px}
+  .opts{display:flex; flex-direction:column; gap:9px; margin-top:14px}
+  .opt{
+    background:var(--card); border:2px solid var(--line); border-radius:18px;
+    padding:14px 12px; font-size:18px; font-weight:700; cursor:pointer; text-align:center;
+    user-select:none;
+  }
+  .opt.ar{direction:rtl; unicode-bidi:isolate; font-size:26px;
+    font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic","Amiri",Arial,sans-serif}
+  .opt:active{transform:translateY(1px); background:#f7f2ee}
+  .opt.ok{border-color:var(--mint); background:#eefaf6; color:var(--mint)}
+  .opt.no{border-color:var(--bad); background:#fdeef0; color:var(--bad)}
+  .opt.dim{opacity:.55}
+  .send{
+    margin-top:14px; width:100%; padding:14px; border-radius:18px; border:none;
+    background:var(--pink); color:#fff; font-size:16px; font-weight:700; cursor:pointer;
+  }
+  .send:active{background:var(--pink-d)}
+  .send.mint{background:var(--mint)}
+  .send.mint:active{background:#259f82}
+  .copy{margin-top:8px; width:100%; padding:11px; border-radius:16px; border:1px solid var(--line); background:#fff; color:var(--muted); font-size:13px; font-weight:600; cursor:pointer}
+  .hidden{display:none !important}
+  h2{font-size:19px; margin:4px 0 12px}
+  h3{font-size:15px; margin:18px 0 8px; color:var(--muted)}
+  .panel{background:var(--card); border:1px solid var(--line); border-radius:20px; padding:14px}
+  table{width:100%; border-collapse:collapse; font-size:13px}
+  th,td{padding:7px 5px; text-align:right; border-bottom:1px solid var(--line)}
+  th{color:var(--muted); font-weight:600; font-size:12px}
+  .hard{display:flex; flex-wrap:wrap; gap:7px; margin-top:4px}
+  .hard span{background:#fdeef0; color:#a3262f; border-radius:10px; padding:6px 10px; font-size:13px; font-weight:700; direction:rtl; unicode-bidi:isolate}
+  .empty{color:var(--muted); font-size:14px; line-height:1.6; text-align:center; padding:12px 4px}
+  .danger{margin-top:16px; width:100%; padding:12px; border-radius:16px; border:1px solid #ffd9e3; background:#fff; color:var(--bad); font-weight:700; font-size:14px; cursor:pointer}
+  .pin{width:100%; padding:14px; font-size:22px; text-align:center; letter-spacing:8px; border-radius:16px; border:1px solid var(--line); direction:ltr}
+  .note{color:var(--muted); font-size:12px; margin-top:8px; text-align:center}
+  .badge{
+    display:inline-block; background:#fff0cf; color:#8a6410; border-radius:999px;
+    padding:4px 10px; font-size:12px; font-weight:700; margin-bottom:8px;
+  }
+  .weak-list{text-align:right; margin:8px 0; padding:0 4px}
+  .weak-list li{margin:6px 0; font-size:14px; font-weight:600}
+  .weak-list .ar{direction:rtl; unicode-bidi:isolate; font-size:18px; margin-left:6px}
+  .home-card{background:var(--card); border:1px solid var(--line); border-radius:22px; padding:18px 16px; margin-top:8px}
+  .sess-pick{display:flex; flex-direction:column; gap:8px; margin-top:10px; max-height:50vh; overflow:auto}
+  .sess-btn{
+    text-align:right; background:#fff; border:1px solid var(--line); border-radius:16px;
+    padding:12px 14px; cursor:pointer; font-weight:700; font-size:14px;
+  }
+  .sess-btn:disabled{opacity:.45; cursor:not-allowed}
+  .sess-btn small{display:block; color:var(--muted); font-weight:600; margin-top:2px}
+  .progress-bar{height:8px; background:#efe7e0; border-radius:999px; overflow:hidden; margin:10px 0 4px}
+  .progress-bar > i{display:block; height:100%; background:linear-gradient(90deg,var(--pink),var(--sun)); width:0%; border-radius:999px; transition:width .25s}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="home">
+    <div class="top">
+      <div class="hello"><span>ערבית של אמיליה</span></div>
+      <button class="ghost" id="btnParentHome" type="button">הורים</button>
+    </div>
+    <div class="sync" id="syncStatus"></div>
+    <div class="home-card">
+      <div class="badge">פְצחא · מנוקד · בלי שמע</div>
+      <h2 style="margin-top:0">בואי נתרגל ערבית</h2>
+      <p style="margin:0;color:var(--muted);font-size:14px;line-height:1.5" id="homeHint">סשן של 15 שאלות. אפשר לבחור סשן פתוח או להמשיך מהנוכחי.</p>
+      <button class="send" id="btnStartCurrent" type="button" style="margin-top:16px">התחילי סשן <span id="curSessLabel">1</span></button>
+      <button class="copy" id="btnPickSession" type="button">בחרי סשן אחר</button>
+    </div>
+    <div id="pickPanel" class="hidden" style="margin-top:12px">
+      <h3>סשנים</h3>
+      <div class="sess-pick" id="sessPick"></div>
+    </div>
+  </div>
+
+  <div id="practice" class="hidden">
+    <div class="top">
+      <div class="hello">סשן <span id="sessNum">1</span></div>
+      <button class="ghost" id="btnQuit" type="button">יציאה</button>
+    </div>
+    <div class="stats">
+      <div class="chip"><b id="sProg">0/15</b><small>התקדמות</small></div>
+      <div class="chip"><b id="sStreak">0</b><small>ברצף</small></div>
+      <div class="chip"><b id="sAcc">—</b><small>הצלחה</small></div>
+    </div>
+    <div class="progress-bar"><i id="progFill"></i></div>
+    <div class="sync" id="syncStatus2"></div>
+    <div class="qcard">
+      <div class="prompt" id="qPrompt">—</div>
+      <div class="stim" id="qStim">—</div>
+      <div class="gloss" id="qGloss"></div>
+      <div class="msg" id="msg"></div>
+    </div>
+    <div class="opts" id="opts"></div>
+  </div>
+
+  <div id="summary" class="hidden">
+    <div class="top">
+      <div class="hello">סיכום סשן <span id="sumSess">1</span></div>
+      <button class="ghost" id="btnSumHome" type="button">למסך הראשי</button>
+    </div>
+    <div class="panel">
+      <h2 id="sumTitle">כל הכבוד!</h2>
+      <table>
+        <tr><th>נכון</th><td id="sumScore">—</td></tr>
+        <tr><th>אחוז הצלחה</th><td id="sumAcc">—</td></tr>
+        <tr><th>רצף מקסימלי</th><td id="sumBest">—</td></tr>
+      </table>
+      <h3>פריטים לחיזוק</h3>
+      <ul class="weak-list" id="sumWeak"></ul>
+      <button class="send" id="btnReport" type="button">שלחי דוח לאמא</button>
+      <button class="copy" id="btnCopy" type="button">העתיקי את הדוח</button>
+      <button class="send mint" id="btnNewSession" type="button">התחילי סשן חדש</button>
+    </div>
+  </div>
+
+  <div id="pinScreen" class="hidden">
+    <div class="top">
+      <div class="hello">מסך הורים</div>
+      <button class="ghost" id="btnPinBack" type="button">חזרה</button>
+    </div>
+    <div class="panel">
+      <h2>הקלידו קוד</h2>
+      <input class="pin" id="pinInput" type="tel" inputmode="numeric" maxlength="4" placeholder="••••" autocomplete="off">
+      <div class="note" id="pinNote">ארבע ספרות</div>
+    </div>
+  </div>
+
+  <div id="parent" class="hidden">
+    <div class="top">
+      <div class="hello">ההתקדמות של אמיליה</div>
+      <button class="ghost" id="btnBack" type="button">חזרה</button>
+    </div>
+    <div class="sync" id="syncStatus3"></div>
+    <div id="parentBody"></div>
+    <button class="danger" id="btnReset" type="button">איפוס כל הנתונים</button>
+  </div>
+
+</div>
+<script>
+var BANK = {"meta":{"product":"arabic-emilia","phase":"msa-script-beginner","locale_ui":"he","audio":false,"vowelized":true,"session_size":15,"notes_he":"סשנים 1–10 מבנקי השאלות הרשמיים; 11–20 מבנה פתוח להרחבה."},"sessions":[{"session":1,"title_he":"ا د ر و + פתחַה","letters":["ا","د","ر","و"],"harakat":["َ"],"questions":[{"id":"s1q01","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ا","answer":"ا","options":["ا","ب","م"],"gloss_he":"אלף","skills":["letter_id","isolated"]},{"id":"s1q02","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"د","answer":"د","options":["د","ر","و"],"gloss_he":"דאל","skills":["letter_id","isolated"]},{"id":"s1q03","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ر","answer":"ر","options":["ر","د","و"],"gloss_he":"רא","skills":["letter_id","isolated"]},{"id":"s1q04","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"و","answer":"و","options":["و","ر","ا"],"gloss_he":"ואו","skills":["letter_id","isolated"]},{"id":"s1q05","type":"matching","prompt_he":"התאימי אות לשם בעברית","stimulus_ar":"ر","answer":"רא","options":["רא","דאל","ואו"],"skills":["letter_name"]},{"id":"s1q06","type":"matching","prompt_he":"התאימי אות לשם בעברית","stimulus_ar":"ا","answer":"אלף","options":["אלף","ואו","דאל"],"skills":["letter_name"]},{"id":"s1q07","type":"haraka","prompt_he":"איזה סימן זה מעל האות? (בַּ)","stimulus_ar":"َ","answer":"פתחַה","options":["פתחַה","כַּסרה","דַמּה"],"gloss_he":"תנועת a קצרה","skills":["haraka"]},{"id":"s1q08","type":"read_syllable","prompt_he":"איך קוראים?","stimulus_ar":"دَ","answer":"דַ","options":["דַ","דִ","דֻ"],"skills":["decode"]},{"id":"s1q09","type":"read_syllable","prompt_he":"איך קוראים?","stimulus_ar":"رَ","answer":"רַ","options":["רַ","רִ","וַ"],"skills":["decode"]},{"id":"s1q10","type":"read_syllable","prompt_he":"איך קוראים?","stimulus_ar":"وَ","answer":"וַ","options":["וַ","אַ","דַ"],"skills":["decode"]},{"id":"s1q11","type":"discrimination","prompt_he":"מה שונה בין د ל־ر?","stimulus_ar":"د / ر","answer":"לדאל יש עיגול; רא מעוקלת","options":["לדאל יש עיגול; רא מעוקלת","שתיהן זהות","רק הנקודות שונות"],"skills":["discrimination"]},{"id":"s1q12","type":"read_syllable","prompt_he":"איך קוראים את ההברה?","stimulus_ar":"اَ","answer":"אַ","options":["אַ","אִ","וַ"],"gloss_he":"תרגיל קריאה","skills":["decode"]},{"id":"s1q13","type":"true_false","prompt_he":"האות و נכתבת משמאל לימין כמו באנגלית.","stimulus_ar":"و","answer":"לא","options":["כן","לא"],"gloss_he":"ערבית מימין לשמאל","skills":["rtl"]},{"id":"s1q14","type":"interleave","prompt_he":"איזו אות זו?","stimulus_ar":"دَ","answer":"د","options":["د","ر","و"],"skills":["review","letter_id"]},{"id":"s1q15","type":"interleave","prompt_he":"התאימי אות לשם בעברית","stimulus_ar":"و","answer":"ואו","options":["ואו","אלף","רא"],"skills":["review","letter_name"]}]},{"session":2,"title_he":"ب ت ث + כַּסרה","letters":["ب","ت","ث"],"harakat":["َ","ِ"],"questions":[{"id":"s2q01","type":"review","prompt_he":"איזו אות זו?","stimulus_ar":"ر","answer":"ر","options":["ر","د","ب"],"skills":["review"]},{"id":"s2q02","type":"review","prompt_he":"איך קוראים?","stimulus_ar":"وَ","answer":"וַ","options":["וַ","וִ","דַ"],"skills":["review"]},{"id":"s2q03","type":"review","prompt_he":"התאימי אות לשם בעברית","stimulus_ar":"ا","answer":"אלף","options":["אלף","בּא","תא"],"skills":["review"]},{"id":"s2q04","type":"review","prompt_he":"איזה סימן זה? (בַּ)","stimulus_ar":"َ","answer":"פתחַה","options":["פתחַה","כַּסרה"],"skills":["review","haraka"]},{"id":"s2q05","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ب","answer":"ب","options":["ب","ت","ث"],"gloss_he":"בּא — נקודה אחת מתחת","skills":["letter_id"]},{"id":"s2q06","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ت","answer":"ت","options":["ت","ب","ث"],"gloss_he":"תא — שתי נקודות מעל","skills":["letter_id"]},{"id":"s2q07","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ث","answer":"ث","options":["ث","ت","ب"],"gloss_he":"ת׳א — שלוש נקודות מעל","skills":["letter_id"]},{"id":"s2q08","type":"discrimination","prompt_he":"מה ההבדל בין ب ל־ت?","stimulus_ar":"ب / ت","answer":"נקודה מתחת לעומת שתיים מעל","options":["נקודה מתחת לעומת שתיים מעל","אין הבדל","רק הגודל"],"skills":["discrimination"]},{"id":"s2q09","type":"haraka","prompt_he":"איזה סימן זה מתחת לאות? (בִּ)","stimulus_ar":"ِ","answer":"כַּסרה","options":["כַּסרה","פתחַה","דַמּה"],"gloss_he":"תנועת i קצרה","skills":["haraka"]},{"id":"s2q10","type":"read_syllable","prompt_he":"איך קוראים?","stimulus_ar":"بِ","answer":"בִּ","options":["בִּ","בַּ","תִ"],"skills":["decode"]},{"id":"s2q11","type":"read_syllable","prompt_he":"איך קוראים?","stimulus_ar":"تَ","answer":"תַ","options":["תַ","תִ","בַּ"],"skills":["decode"]},{"id":"s2q12","type":"read_syllable","prompt_he":"איך קוראים?","stimulus_ar":"ثِ","answer":"תִ׳","options":["תִ׳","תַ","בִּ"],"skills":["decode"]},{"id":"s2q13","type":"matching","prompt_he":"התאימי אות לשם בעברית","stimulus_ar":"ث","answer":"ת׳א","options":["ת׳א","תא","בּא"],"skills":["letter_name"]},{"id":"s2q14","type":"interleave","prompt_he":"איזו אות זו?","stimulus_ar":"د","answer":"د","options":["د","ب","ت"],"skills":["review"]},{"id":"s2q15","type":"interleave","prompt_he":"איך קוראים?","stimulus_ar":"بَ","answer":"בַּ","options":["בַּ","בִּ","תַ"],"skills":["review","decode"]}]},{"session":3,"title_he":"ج ح خ + דַמּה","letters":["ج","ح","خ"],"harakat":["َ","ِ","ُ"],"questions":[{"id":"s3q01","type":"review","prompt_he":"איזו אות זו?","stimulus_ar":"ب","answer":"ب","options":["ب","ت","ث"],"skills":["review"]},{"id":"s3q02","type":"review","prompt_he":"איך קוראים?","stimulus_ar":"تِ","answer":"תִ","options":["תִ","תַ","ثِ"],"skills":["review"]},{"id":"s3q03","type":"review","prompt_he":"התאימי אות לשם בעברית","stimulus_ar":"ث","answer":"ת׳א","options":["ת׳א","חא","ג׳ים"],"skills":["review"]},{"id":"s3q04","type":"review","prompt_he":"איזה סימן זה? (בִּ)","stimulus_ar":"ِ","answer":"כַּסרה","options":["כַּסרה","דַמּה","פתחַה"],"skills":["review"]},{"id":"s3q05","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ج","answer":"ج","options":["ج","ح","خ"],"gloss_he":"ג׳ים — נקודה באמצע","skills":["letter_id"]},{"id":"s3q06","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ح","answer":"ح","options":["ح","ج","خ"],"gloss_he":"חא — בלי נקודה","skills":["letter_id"]},{"id":"s3q07","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"خ","answer":"خ","options":["خ","ح","ج"],"gloss_he":"ח׳א — נקודה מעל","skills":["letter_id"]},{"id":"s3q08","type":"discrimination","prompt_he":"מה מבדיל ح מ־خ?","stimulus_ar":"ح / خ","answer":"נקודה מעל לח׳א","options":["נקודה מעל לח׳א","אין הבדל","רק הגודל"],"skills":["discrimination"]},{"id":"s3q09","type":"haraka","prompt_he":"איזה סימן זה מעל האות? (בֻּ)","stimulus_ar":"ُ","answer":"דַמּה","options":["דַמּה","פתחַה","כַּסרה"],"gloss_he":"תנועת u קצרה","skills":["haraka"]},{"id":"s3q10","type":"read_syllable","prompt_he":"איך קוראים?","stimulus_ar":"جَ","answer":"גַ׳","options":["גַ׳","חַ","חֻ׳"],"skills":["decode"]},{"id":"s3q11","type":"read_syllable","prompt_he":"איך קוראים?","stimulus_ar":"حُ","answer":"חֻ","options":["חֻ","חַ","גֻ׳"],"skills":["decode"]},{"id":"s3q12","type":"read_syllable","prompt_he":"איך קוראים?","stimulus_ar":"خِ","answer":"חִ׳","options":["חִ׳","חִ","גִ׳"],"skills":["decode"]},{"id":"s3q13","type":"matching","prompt_he":"התאימי אות לשם בעברית","stimulus_ar":"ح","answer":"חא","options":["חא","ח׳א","ג׳ים"],"skills":["letter_name"]},{"id":"s3q14","type":"interleave","prompt_he":"איזו אות זו?","stimulus_ar":"ت","answer":"ت","options":["ت","ح","ج"],"skills":["review"]},{"id":"s3q15","type":"interleave","prompt_he":"איך קוראים?","stimulus_ar":"بُ","answer":"בֻּ","options":["בֻּ","בַּ","جُ"],"skills":["review","decode"]}]},{"session":4,"title_he":"س ش ص + סֻכּוּן + מילים מבוקרות","letters":["س","ش","ص"],"harakat":["َ","ِ","ُ","ْ"],"vocab":[{"ar":"بَرَد","he":"קור"},{"ar":"تُوت","he":"תות"}],"questions":[{"id":"s4q01","type":"review","prompt_he":"איזו אות זו?","stimulus_ar":"خ","answer":"خ","options":["خ","ح","ج"],"skills":["review"]},{"id":"s4q02","type":"review","prompt_he":"איך קוראים?","stimulus_ar":"جُ","answer":"גֻ׳","options":["גֻ׳","חُ","سُ"],"skills":["review"]},{"id":"s4q03","type":"review","prompt_he":"התאימי אות לשם בעברית","stimulus_ar":"ج","answer":"ג׳ים","options":["ג׳ים","סין","שין"],"skills":["review"]},{"id":"s4q04","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"س","answer":"س","options":["س","ش","ص"],"gloss_he":"סין","skills":["letter_id"]},{"id":"s4q05","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ش","answer":"ش","options":["ش","س","ص"],"gloss_he":"שין — שלוש נקודות מעל","skills":["letter_id"]},{"id":"s4q06","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ص","answer":"ص","options":["ص","س","ش"],"gloss_he":"צאד","skills":["letter_id"]},{"id":"s4q07","type":"discrimination","prompt_he":"מה מבדיל س מ־ش?","stimulus_ar":"س / ش","answer":"נקודות מעל לשין","options":["נקודות מעל לשין","אין הבדל","רק העובי"],"skills":["discrimination"]},{"id":"s4q08","type":"haraka","prompt_he":"איזה סימן זה מעל האות בלי תנועה? (بْ)","stimulus_ar":"ْ","answer":"סֻכּוּן","options":["סֻכּוּן","שַׁדּה","פתחַה"],"gloss_he":"בלי תנועה","skills":["haraka"]},{"id":"s4q09","type":"read_syllable","prompt_he":"איך קוראים?","stimulus_ar":"سَ","answer":"סַ","options":["סַ","שַ","צַ"],"skills":["decode"]},{"id":"s4q10","type":"read_word","prompt_he":"איך קוראים את המילה?","stimulus_ar":"بَرَد","answer":"בַּרַד","options":["בַּרַד","בַּדַר","תַרַד"],"gloss_he":"קור","skills":["decode","vocab"]},{"id":"s4q11","type":"translate_ar_he","prompt_he":"מה המשמעות?","stimulus_ar":"بَرَد","answer":"קור","options":["קור","בית","ספר"],"skills":["vocab"]},{"id":"s4q12","type":"read_word","prompt_he":"איך קוראים?","stimulus_ar":"تُوت","answer":"תֻות","options":["תֻות","תַות","בֻּות"],"gloss_he":"תות","skills":["decode","vocab"]},{"id":"s4q13","type":"translate_ar_he","prompt_he":"מה המשמעות?","stimulus_ar":"تُوت","answer":"תות","options":["תות","דלת","מים"],"skills":["vocab"]},{"id":"s4q14","type":"interleave","prompt_he":"איזו אות זו?","stimulus_ar":"ش","answer":"ش","options":["ش","س","ح"],"skills":["review"]},{"id":"s4q15","type":"interleave","prompt_he":"איך קוראים?","stimulus_ar":"صِ","answer":"צִ","options":["צִ","סִ","שִ"],"skills":["review","decode"]}]},{"session":5,"title_he":"م ن ل + חיבור בסיסי + שַׁדּה (היכרות)","letters":["م","ن","ل"],"harakat":["َ","ِ","ُ","ْ","ّ"],"vocab":[{"ar":"بَاب","he":"דלת"},{"ar":"نَامَ","he":"הוא ישן"},{"ar":"مَاء","he":"מים"}],"questions":[{"id":"s5q01","type":"review","prompt_he":"איזו אות זו?","stimulus_ar":"س","answer":"س","options":["س","ش","ص"],"skills":["review"]},{"id":"s5q02","type":"review","prompt_he":"איך קוראים?","stimulus_ar":"بَرَد","answer":"בַּרַד","options":["בַּרַד","نَرَد"],"skills":["review"]},{"id":"s5q03","type":"review","prompt_he":"מה המשמעות?","stimulus_ar":"تُوت","answer":"תות","options":["תות","לחם"],"skills":["review","vocab"]},{"id":"s5q04","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"م","answer":"م","options":["م","ن","ل"],"gloss_he":"מים","skills":["letter_id"]},{"id":"s5q05","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ن","answer":"ن","options":["ن","م","ل"],"gloss_he":"נון","skills":["letter_id"]},{"id":"s5q06","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ل","answer":"ل","options":["ل","ن","م"],"gloss_he":"לאם","skills":["letter_id"]},{"id":"s5q07","type":"connected_form","prompt_he":"זו אות מ באמצע מילה. איזו אות?","stimulus_ar":"ـمـ","answer":"م","options":["م","ن","ب"],"skills":["connected"]},{"id":"s5q08","type":"connected_form","prompt_he":"זו אות ב בתחילת מילה. איזו אות?","stimulus_ar":"بـ","answer":"ب","options":["ب","ت","ن"],"skills":["connected"]},{"id":"s5q09","type":"connected_form","prompt_he":"זו אות נ בסוף מילה. איזו אות?","stimulus_ar":"ـن","answer":"ن","options":["ن","م","ل"],"skills":["connected"]},{"id":"s5q10","type":"haraka","prompt_he":"איזה סימן זה? (כפילות עיצור)","stimulus_ar":"ّ","answer":"שַׁדּה","options":["שַׁדּה","סֻכּוּן","דַמּה"],"gloss_he":"היכרות בלבד","skills":["haraka"]},{"id":"s5q11","type":"read_word","prompt_he":"איך קוראים?","stimulus_ar":"بَاب","answer":"בַּאב","options":["בַּאב","נַאב","מַאב"],"gloss_he":"דלת","skills":["decode","vocab"]},{"id":"s5q12","type":"translate_ar_he","prompt_he":"מה המשמעות?","stimulus_ar":"بَاب","answer":"דלת","options":["דלת","בית","מים"],"skills":["vocab"]},{"id":"s5q13","type":"read_word","prompt_he":"איך קוראים?","stimulus_ar":"نَامَ","answer":"נַאמַ","options":["נַאמַ","מַאנַ","לַאמַ"],"gloss_he":"הוא ישן","skills":["decode","vocab"]},{"id":"s5q14","type":"translate_he_ar","prompt_he":"איזו מילה אומרת «מים»?","stimulus_ar":"مَاء","answer":"مَاء","options":["مَاء","بَاب","تُوت"],"gloss_he":"מים","skills":["vocab"]},{"id":"s5q15","type":"interleave","prompt_he":"באיזו מילה האות ب מופיעה מחוברת בהתחלה?","stimulus_ar":"بَاب","answer":"بَاب","options":["بَاب","اَ","دَ"],"skills":["connected","review"]}]},{"session":6,"title_he":"ف ق ك + חיבור מתקדם","letters":["ف","ق","ك"],"harakat":["َ","ِ","ُ","ْ"],"vocab":[{"ar":"كِتَاب","he":"ספר"},{"ar":"فَم","he":"פה"}],"questions":[{"id":"s6q01","type":"review","prompt_he":"איזו אות זו?","stimulus_ar":"م","answer":"م","options":["م","ن","ل"],"skills":["review"]},{"id":"s6q02","type":"review","prompt_he":"מה המשמעות?","stimulus_ar":"بَاب","answer":"דלת","options":["דלת","מים","ספר"],"skills":["review","vocab"]},{"id":"s6q03","type":"review","prompt_he":"איזו אות באמצע?","stimulus_ar":"ـمـ","answer":"م","options":["م","ب","ف"],"skills":["review","connected"]},{"id":"s6q04","type":"review","prompt_he":"איך קוראים?","stimulus_ar":"مَاء","answer":"מַאא","options":["מַאא","נַאמַ","בַּאב"],"skills":["review"]},{"id":"s6q05","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ف","answer":"ف","options":["ف","ق","ك"],"gloss_he":"פא — נקודה אחת מעל","skills":["letter_id"]},{"id":"s6q06","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ق","answer":"ق","options":["ق","ف","ك"],"gloss_he":"קאף — שתי נקודות מעל","skills":["letter_id"]},{"id":"s6q07","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ك","answer":"ك","options":["ك","ف","ق"],"gloss_he":"כּאף","skills":["letter_id"]},{"id":"s6q08","type":"discrimination","prompt_he":"מה מבדיל ف מ־ق?","stimulus_ar":"ف / ق","answer":"מספר הנקודות מעל","options":["מספר הנקודות מעל","אין הבדל","רק הגודל"],"skills":["discrimination"]},{"id":"s6q09","type":"connected_form","prompt_he":"זו ف בתחילת מילה. איזו אות?","stimulus_ar":"فـ","answer":"ف","options":["ف","ق","ب"],"skills":["connected"]},{"id":"s6q10","type":"connected_form","prompt_he":"זו ك באמצע מילה. איזו אות?","stimulus_ar":"ـكـ","answer":"ك","options":["ك","ل","ف"],"skills":["connected"]},{"id":"s6q11","type":"read_word","prompt_he":"איך קورאים?","stimulus_ar":"كِتَاب","answer":"כִּתַאב","options":["כִּתַאב","קִתַאב","פִתַאב"],"gloss_he":"ספר","skills":["decode","vocab"]},{"id":"s6q12","type":"translate_ar_he","prompt_he":"מה המשמעות?","stimulus_ar":"كِتَاب","answer":"ספר","options":["ספר","דלת","מים"],"skills":["vocab"]},{"id":"s6q13","type":"read_word","prompt_he":"איך קוראים?","stimulus_ar":"فَم","answer":"פַם","options":["פַם","קַם","כַּם"],"gloss_he":"פה","skills":["decode","vocab"]},{"id":"s6q14","type":"interleave","prompt_he":"איזו אות זו?","stimulus_ar":"ق","answer":"ق","options":["ق","ف","ن"],"skills":["review"]},{"id":"s6q15","type":"interleave","prompt_he":"מה המשמעות?","stimulus_ar":"فَم","answer":"פה","options":["פה","ספר","תות"],"skills":["review","vocab"]}]},{"session":7,"title_he":"ه ة ي + ال־ (ה׳ הידיעה)","letters":["ه","ة","ي"],"harakat":["َ","ِ","ُ","ْ"],"grammar":["definite_article"],"vocab":[{"ar":"الْبَاب","he":"הדלת"},{"ar":"هِيَ","he":"היא"},{"ar":"هِيَ بِنْت","he":"היא ילדה"}],"questions":[{"id":"s7q01","type":"review","prompt_he":"איזו אות זו?","stimulus_ar":"ك","answer":"ك","options":["ك","ق","ف"],"skills":["review"]},{"id":"s7q02","type":"review","prompt_he":"מה המשמעות?","stimulus_ar":"كِتَاب","answer":"ספר","options":["ספר","פה","דלת"],"skills":["review","vocab"]},{"id":"s7q03","type":"review","prompt_he":"איך קוראים?","stimulus_ar":"فَم","answer":"פַם","options":["פַם","בַּאב","מַאא"],"skills":["review"]},{"id":"s7q04","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ه","answer":"ه","options":["ه","ة","ي"],"gloss_he":"הא","skills":["letter_id"]},{"id":"s7q05","type":"recognition","prompt_he":"איזו אות/סיומת זו?","stimulus_ar":"ة","answer":"ة","options":["ة","ه","ت"],"gloss_he":"תא מרבּוּטה (סיומת נקבה)","skills":["letter_id","gender"]},{"id":"s7q06","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ي","answer":"ي","options":["ي","ه","ب"],"gloss_he":"יא — שתי נקודות מתחת","skills":["letter_id"]},{"id":"s7q07","type":"discrimination","prompt_he":"מה מבדיל ب מ־ي?","stimulus_ar":"ب / ي","answer":"צורת הגוף + מיקום הנקודות","options":["צורת הגוף + מיקום הנקודות","אין הבדל","רק הגודל"],"skills":["discrimination"]},{"id":"s7q08","type":"grammar","prompt_he":"מה מוסיפים לפני שם כדי לומר «ה־» (מיודע)?","stimulus_ar":"ال","answer":"ال","options":["ال","ة","بـ"],"gloss_he":"ה׳ הידיעה","skills":["definite_article"]},{"id":"s7q09","type":"read_word","prompt_he":"איך קוראים?","stimulus_ar":"الْبَاب","answer":"אַלְ־בַּאב","options":["אַלְ־בַּאב","בַּאב","אַלְ־כִּתַאב"],"gloss_he":"הדלת","skills":["decode","definite_article"]},{"id":"s7q10","type":"translate_ar_he","prompt_he":"מה המשמעות?","stimulus_ar":"الْبَاب","answer":"הדלת","options":["הדלת","דלת","הספר"],"skills":["vocab","definite_article"]},{"id":"s7q11","type":"discrimination","prompt_he":"מה ההבדל בין بَاب ל־الْبَاب?","stimulus_ar":"بَاب / الْبَاب","answer":"בלי/עם ה׳ הידיעה","options":["בלי/עם ה׳ הידיעה","מין שונה","אין הבדל"],"skills":["definite_article"]},{"id":"s7q12","type":"read_word","prompt_he":"איך קוראים?","stimulus_ar":"هِيَ","answer":"הִיַ","options":["הִיַ","הֻוַ","אַנַא"],"gloss_he":"היא","skills":["decode","vocab"]},{"id":"s7q13","type":"translate_ar_he","prompt_he":"מה המשמעות?","stimulus_ar":"هِيَ","answer":"היא","options":["היא","הוא","אני"],"skills":["vocab"]},{"id":"s7q14","type":"interleave","prompt_he":"איזו אות/סיומת זו?","stimulus_ar":"ة","answer":"ة","options":["ة","ه","ت"],"skills":["review"]},{"id":"s7q15","type":"interleave","prompt_he":"מה אומר الْكِتَاب?","stimulus_ar":"الْكِتَاب","answer":"הספר","options":["הספר","ספר","הדלת"],"skills":["review","definite_article","vocab"]}]},{"session":8,"title_he":"ط ظ ع غ","letters":["ط","ظ","ع","غ"],"harakat":["َ","ِ","ُ","ْ"],"vocab":[{"ar":"طَالِب","he":"תלמיד"},{"ar":"عَيْن","he":"עין"}],"questions":[{"id":"s8q01","type":"review","prompt_he":"מה מוסיפים למיודע?","stimulus_ar":"ال","answer":"ال","options":["ال","ة","و"],"skills":["review","definite_article"]},{"id":"s8q02","type":"review","prompt_he":"מה המשמעות?","stimulus_ar":"الْبَاب","answer":"הדלת","options":["הדלת","דלת","המים"],"skills":["review"]},{"id":"s8q03","type":"review","prompt_he":"איזו אות זו?","stimulus_ar":"ي","answer":"ي","options":["ي","ه","ة"],"skills":["review"]},{"id":"s8q04","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ط","answer":"ط","options":["ط","ظ","ت"],"gloss_he":"טא","skills":["letter_id"]},{"id":"s8q05","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ظ","answer":"ظ","options":["ظ","ط","ض"],"gloss_he":"ז׳א — נקודה מעל","skills":["letter_id"]},{"id":"s8q06","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ع","answer":"ع","options":["ع","غ","ح"],"gloss_he":"עין","skills":["letter_id"]},{"id":"s8q07","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"غ","answer":"غ","options":["غ","ع","خ"],"gloss_he":"ע׳ין — נקודה מעל","skills":["letter_id"]},{"id":"s8q08","type":"discrimination","prompt_he":"מה מבדיל ع מ־غ?","stimulus_ar":"ع / غ","answer":"נקודה מעל לע׳ין","options":["נקודה מעל לע׳ין","אין הבדל","רק הגודל"],"skills":["discrimination"]},{"id":"s8q09","type":"discrimination","prompt_he":"מה מבדיל ط מ־ظ?","stimulus_ar":"ط / ظ","answer":"נקודה מעל לז׳א","options":["נקודה מעל לז׳א","אין הבדל","רק העובי"],"skills":["discrimination"]},{"id":"s8q10","type":"read_syllable","prompt_he":"איך קוראים?","stimulus_ar":"عَ","answer":"עַ","options":["עַ","עִ","ע׳ַ"],"skills":["decode"]},{"id":"s8q11","type":"read_word","prompt_he":"איך קוראים?","stimulus_ar":"عَيْن","answer":"עַיְן","options":["עַיְן","עַנְי","ע׳ַיְן"],"gloss_he":"עין","skills":["decode","vocab"]},{"id":"s8q12","type":"translate_ar_he","prompt_he":"מה המשמעות?","stimulus_ar":"عَيْن","answer":"עין","options":["עין","פה","יד"],"skills":["vocab"]},{"id":"s8q13","type":"read_word","prompt_he":"איך קוראים?","stimulus_ar":"طَالِب","answer":"טַאלִב","options":["טַאלִב","תַאלִב","זַאלִב"],"gloss_he":"תלמיד","skills":["decode","vocab"]},{"id":"s8q14","type":"interleave","prompt_he":"איזו אות זו?","stimulus_ar":"غ","answer":"غ","options":["غ","ع","خ"],"skills":["review"]},{"id":"s8q15","type":"interleave","prompt_he":"מה המשמעות?","stimulus_ar":"طَالِب","answer":"תלמיד","options":["תלמיד","מורה","ספר"],"skills":["review","vocab"]}]},{"session":9,"title_he":"ز ذ ض + מגדר ة + אוצר בית־ספר","letters":["ز","ذ","ض"],"harakat":["َ","ِ","ُ","ْ","ّ"],"grammar":["gender_ta_marbuta"],"vocab":[{"ar":"مَدْرَسَة","he":"בית ספר"},{"ar":"وَلَد","he":"ילד"},{"ar":"بِنْت","he":"ילדה"},{"ar":"كَبِير","he":"גדול (זכר)"},{"ar":"كَبِيرَة","he":"גדולה (נקבה)"}],"questions":[{"id":"s9q01","type":"review","prompt_he":"איזו אות זו?","stimulus_ar":"ع","answer":"ع","options":["ع","غ","ح"],"skills":["review"]},{"id":"s9q02","type":"review","prompt_he":"מה המשמעות?","stimulus_ar":"طَالِب","answer":"תלמיד","options":["תלמיד","עין","ספר"],"skills":["review"]},{"id":"s9q03","type":"review","prompt_he":"מה אומר الْكِتَاب?","stimulus_ar":"الْكِتَاب","answer":"הספר","options":["הספר","ספר","הדלת"],"skills":["review"]},{"id":"s9q04","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ز","answer":"ز","options":["ز","ر","ذ"],"gloss_he":"זאי — נקודה מעל לרא","skills":["letter_id"]},{"id":"s9q05","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ذ","answer":"ذ","options":["ذ","د","ز"],"gloss_he":"ד׳אל — נקודה מעל לדאל","skills":["letter_id"]},{"id":"s9q06","type":"recognition","prompt_he":"איזו אות זו?","stimulus_ar":"ض","answer":"ض","options":["ض","ص","ظ"],"gloss_he":"ד׳אד","skills":["letter_id"]},{"id":"s9q07","type":"discrimination","prompt_he":"מה מבדיל د מ־ذ?","stimulus_ar":"د / ذ","answer":"נקודה מעל לד׳אל","options":["נקודה מעל לד׳אל","אין הבדל","רק הגודל"],"skills":["discrimination"]},{"id":"s9q08","type":"grammar","prompt_he":"איזו מילה נקבה (עם ة)?","stimulus_ar":"مَدْرَسَة","answer":"مَدْرَسَة","options":["مَدْرَسَة","وَلَد","كِتَاب"],"gloss_he":"בית ספר","skills":["gender"]},{"id":"s9q09","type":"read_word","prompt_he":"איך קוראים?","stimulus_ar":"مَدْرَسَة","answer":"מַדְרַסַה","options":["מַדְרַסַה","מַדַרַס","בִּנְת"],"gloss_he":"בית ספר","skills":["decode","vocab"]},{"id":"s9q10","type":"translate_ar_he","prompt_he":"מה המשמעות?","stimulus_ar":"مَدْرَسَة","answer":"בית ספר","options":["בית ספר","דלת","תלמיד"],"skills":["vocab"]},{"id":"s9q11","type":"matching","prompt_he":"התאימי למין: وَلَد","stimulus_ar":"وَلَد","answer":"ילד (זכר)","options":["ילד (זכר)","ילדה (נקבה)","ספר"],"skills":["gender","vocab"]},{"id":"s9q12","type":"matching","prompt_he":"התאימי למין: بِنْت","stimulus_ar":"بِنْت","answer":"ילדה (נקבה)","options":["ילדה (נקבה)","ילד (זכר)","מורה"],"skills":["gender","vocab"]},{"id":"s9q13","type":"grammar","prompt_he":"איזו צורה מתאימה לנקבה?","stimulus_ar":"كَبِيرَة","answer":"كَبِيرَة","options":["كَبِيرَة","كَبِير","كِتَاب"],"gloss_he":"גדולה","skills":["gender"]},{"id":"s9q14","type":"interleave","prompt_he":"איזו אות זו?","stimulus_ar":"ز","answer":"ز","options":["ز","ر","ذ"],"skills":["review"]},{"id":"s9q15","type":"interleave","prompt_he":"מה המשמעות?","stimulus_ar":"بِنْت","answer":"ילדה","options":["ילדה","ילד","דלת"],"skills":["review","vocab"]}]},{"session":10,"title_he":"משפט שמני בסיסי (مبتدأ + خبر) + חזרה כוללת","letters":[],"grammar":["nominal_sentence"],"vocab":[{"ar":"الْبَيْت كَبِير","he":"הבית גדול"},{"ar":"الْبِنْت صَغِيرَة","he":"הילדה קטנה"},{"ar":"هٰذَا كِتَاب","he":"זה ספר"},{"ar":"صَغِير","he":"קטן"},{"ar":"صَغِيرَة","he":"קטנה"},{"ar":"بَيْت","he":"בית"}],"questions":[{"id":"s10q01","type":"review","prompt_he":"מה המשמעות?","stimulus_ar":"مَدْرَسَة","answer":"בית ספר","options":["בית ספר","תלמיד","דלת"],"skills":["review"]},{"id":"s10q02","type":"review","prompt_he":"איזו צורה נקבה?","stimulus_ar":"كَبِيرَة","answer":"كَبِيرَة","options":["كَبِيرَة","كَبِير","وَلَد"],"skills":["review","gender"]},{"id":"s10q03","type":"review","prompt_he":"מה אומר الْبَاب?","stimulus_ar":"الْبَاب","answer":"הדלת","options":["הדלת","דלת","הבית"],"skills":["review"]},{"id":"s10q04","type":"grammar","prompt_he":"בערבית «הבית גדול» אין צורך במילת «הוא/is». איך נראה המשפט?","stimulus_ar":"الْبَيْت كَبِير","answer":"الْبَيْت كَبِير","options":["الْبَيْت كَبِير","الْبَيْت هُوَ كَبِير","بَيْت الْكَبِير"],"gloss_he":"משפט שמני: נושא + תואר","skills":["nominal_sentence"]},{"id":"s10q05","type":"read_word","prompt_he":"איך קוראים?","stimulus_ar":"بَيْت","answer":"בַּיְת","options":["בַּיְת","בַּאב","בִּנְת"],"gloss_he":"בית","skills":["decode","vocab"]},{"id":"s10q06","type":"translate_ar_he","prompt_he":"מה המשמעות?","stimulus_ar":"الْبَيْت كَبِير","answer":"הבית גדול","options":["הבית גדול","הבית קטן","הדלת גדולה"],"skills":["nominal_sentence","vocab"]},{"id":"s10q07","type":"translate_he_ar","prompt_he":"איך אומרים «הילדה קטנה»?","stimulus_ar":"الْبِنْت صَغِيرَة","answer":"الْبِنْت صَغِيرَة","options":["الْبِنْت صَغِيرَة","الْوَلَد كَبِير","الْبِنْت كَبِير"],"skills":["nominal_sentence","gender"]},{"id":"s10q08","type":"grammar","prompt_he":"מה החלק שמתאר (خبر) ב־الْبَيْت كَبِير?","stimulus_ar":"كَبِير","answer":"كَبِير","options":["كَبِير","الْبَيْت","ال"],"skills":["nominal_sentence"]},{"id":"s10q09","type":"grammar","prompt_he":"מה הנושא (مبتدأ) ב־الْبِنْت صَغِيرَة?","stimulus_ar":"الْبِنْت","answer":"الْبِنْت","options":["الْبِنْت","صَغِيرَة","ة"],"skills":["nominal_sentence"]},{"id":"s10q10","type":"read_word","prompt_he":"איך קוראים?","stimulus_ar":"هٰذَا كِتَاب","answer":"הַֿד׳ַא כִּתַאב","options":["הַֿד׳ַא כִּתַאב","הִיַ כִּתַאב","אַלְכִּתַאב"],"gloss_he":"זה ספר","skills":["decode","vocab"]},{"id":"s10q11","type":"translate_ar_he","prompt_he":"מה המשמעות?","stimulus_ar":"هٰذَا كِتَاب","answer":"זה ספר","options":["זה ספר","הספר גדול","זו ילדה"],"skills":["vocab","nominal_sentence"]},{"id":"s10q12","type":"discrimination","prompt_he":"איזו משפט מתאים לזכר?","stimulus_ar":"الْوَلَد كَبِير","answer":"الْوَلَد كَبِير","options":["الْوَلَد كَبِير","الْبِنْت كَبِير","الْوَلَد كَبِيرَة"],"skills":["gender","nominal_sentence"]},{"id":"s10q13","type":"interleave","prompt_he":"איזו אות זו?","stimulus_ar":"ض","answer":"ض","options":["ض","ص","ظ"],"skills":["review"]},{"id":"s10q14","type":"interleave","prompt_he":"מה המשמעות?","stimulus_ar":"عَيْن","answer":"עין","options":["עין","פה","יד"],"skills":["review"]},{"id":"s10q15","type":"interleave","prompt_he":"תרגמי: «הבית גדול»","stimulus_ar":"الْبَيْت كَبِير","answer":"الْبَيْت كَبِير","options":["الْبَيْت كَبِير","بَيْت كَبِيرَة","الْبَاب صَغِير"],"skills":["nominal_sentence","review"]}]}]};
+var CURRICULUM = [{"n":1,"title":"ا د ر و + פתחַה"},{"n":2,"title":"ب ت ث + כַּסרה"},{"n":3,"title":"ج ح خ + דַמּה"},{"n":4,"title":"س ش ص + סֻכּוּן + מילים מבוקרות"},{"n":5,"title":"م ن ل + חיבור בסיסי + שַׁדּה (היכרות)"},{"n":6,"title":"ف ق ك + חיבור מתקדם"},{"n":7,"title":"ه ة ي + ال־ (ה׳ הידיעה)"},{"n":8,"title":"ط ظ ع غ"},{"n":9,"title":"ز ذ ض + מגדר ة + אוצר בית־ספר"},{"n":10,"title":"משפט שמני בסיסי (مبتدأ + خبر) + חזרה כוללת"},{"n":11,"title":"ברכות ונימוס בפְצחא"},{"n":12,"title":"היכרות: اسمي…، أنا…، عمري…"},{"n":13,"title":"משפחה גרעינית + هذا/هذه"},{"n":14,"title":"בית וחדרים + في/على"},{"n":15,"title":"בית ספר וחפצי כיתה"},{"n":16,"title":"מספרים 1–10 + ה' הידיעה"},{"n":17,"title":"צבעים + התאמה לחפצים"},{"n":18,"title":"ימי השבוע + أين/ما/هل"},{"n":19,"title":"סיכום משולב: משפטים אישיים"},{"n":20,"title":"אבחון Novice + מפת המשך"}];
+"use strict";
+/* ערבית של אמיליה — MSA + tashkeel, 15Q sessions, localStorage + Supabase */
+
+var CLOUD = {
+  url: "https://nrxhjzmmmzqjytmdgzjg.supabase.co",
+  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5yeGhqem1tbXpxanl0bWRnempnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1NDg3MTAsImV4cCI6MjEwNDEyNDcxMH0.5KYX69e1AyXqtHHRejFarK-r1yoXdmlpav2Oazb2WIs",
+  rowId: "emilia-arabic"
+};
+
+var PIN = "2604", KEY = "arabic_amelia_v1", SESSION_SIZE = 15;
+var mem = null, pushTimer = null, syncEls = [];
+
+function cloudConfigured(){
+  return !!(CLOUD.url && CLOUD.anonKey && CLOUD.url.indexOf("https://") === 0 && CLOUD.anonKey.length > 20);
+}
+function setSync(text){
+  syncEls.forEach(function(el){ if(el) el.textContent = text || ""; });
+}
+function blank(){
+  return { facts:{}, sessions:[], answers:0, unlockedSession:1, reviewBank:[], lastCurriculum:1 };
+}
+function load(){
+  try{
+    var raw = localStorage.getItem(KEY);
+    return raw ? JSON.parse(raw) : blank();
+  }catch(e){ return mem || (mem = blank()); }
+}
+function saveLocal(){
+  try{ localStorage.setItem(KEY, JSON.stringify(db)); }catch(e){ mem = db; }
+}
+function save(opts){
+  opts = opts || {};
+  saveLocal();
+  if(opts.immediate){
+    if(pushTimer){ clearTimeout(pushTimer); pushTimer = null; }
+    cloudPush();
+  }else{
+    schedulePush();
+  }
+}
+function schedulePush(){
+  if(pushTimer) clearTimeout(pushTimer);
+  pushTimer = setTimeout(function(){ pushTimer = null; cloudPush(); }, 800);
+}
+function cloudHeaders(){
+  return {
+    "apikey": CLOUD.anonKey,
+    "Authorization": "Bearer " + CLOUD.anonKey,
+    "Content-Type": "application/json"
+  };
+}
+function scoreData(d){
+  if(!d || typeof d !== "object") return 0;
+  var answers = typeof d.answers === "number" ? d.answers : 0;
+  var sessions = d.sessions || [];
+  var withQ = 0;
+  for(var i = 0; i < sessions.length; i++){
+    if(sessions[i] && sessions[i].q > 0) withQ++;
+  }
+  return answers * 1000 + withQ;
+}
+function normalizeDb(d){
+  if(!d || typeof d !== "object") d = blank();
+  if(!d.facts) d.facts = {};
+  if(!d.sessions) d.sessions = [];
+  if(typeof d.answers !== "number") d.answers = 0;
+  if(typeof d.unlockedSession !== "number") d.unlockedSession = 1;
+  if(!Array.isArray(d.reviewBank)) d.reviewBank = [];
+  if(typeof d.lastCurriculum !== "number") d.lastCurriculum = 1;
+  return d;
+}
+function cloudPull(){
+  if(!cloudConfigured()){ setSync(""); return Promise.resolve(false); }
+  setSync("שומר בענן…");
+  var url = CLOUD.url + "/rest/v1/kefel_state?id=eq." + encodeURIComponent(CLOUD.rowId) + "&select=data,updated_at";
+  return fetch(url, { method:"GET", headers: cloudHeaders() }).then(function(res){
+    if(!res.ok) throw new Error("pull " + res.status);
+    return res.json();
+  }).then(function(rows){
+    var cloudData = null;
+    if(rows && rows.length && rows[0] && rows[0].data){
+      var data = rows[0].data;
+      if(typeof data === "string"){ try{ data = JSON.parse(data); }catch(e){ data = null; } }
+      if(data && typeof data === "object") cloudData = data;
+    }
+    var localScore = scoreData(db);
+    var cloudScore = scoreData(cloudData);
+    if(cloudScore > localScore){
+      db = normalizeDb(cloudData);
+      saveLocal();
+      setSync("מסונכרן");
+      return true;
+    } else if(localScore > 0 && localScore >= cloudScore){
+      return cloudPush();
+    } else {
+      setSync("מסונכרן");
+      return false;
+    }
+  }).catch(function(){
+    setSync("אין רשת — נשמר במכשיר");
+    return false;
+  });
+}
+function cloudPush(){
+  if(!cloudConfigured()) return Promise.resolve(false);
+  setSync("שומר בענן…");
+  var url = CLOUD.url + "/rest/v1/kefel_state?on_conflict=id";
+  var body = { id: CLOUD.rowId, data: db, updated_at: new Date().toISOString() };
+  var headers = cloudHeaders();
+  headers["Prefer"] = "resolution=merge-duplicates,return=minimal";
+  return fetch(url, { method:"POST", headers:headers, body: JSON.stringify(body) }).then(function(res){
+    if(!res.ok) throw new Error("push " + res.status);
+    setSync("מסונכרן");
+    return true;
+  }).catch(function(){
+    setSync("אין רשת — נשמר במכשיר");
+    return false;
+  });
+}
+
+var db = normalizeDb(load());
+
+function fact(id){
+  if(!db.facts[id]) db.facts[id] = { seen:0, correct:0, wrong:0, streak:0, lastWrongAt:-9999, label:"", stim:"" };
+  return db.facts[id];
+}
+
+function getBankSession(n){
+  for(var i=0;i<BANK.sessions.length;i++){
+    if(BANK.sessions[i].session === n) return BANK.sessions[i];
+  }
+  return null;
+}
+function curriculumTitle(n){
+  for(var i=0;i<CURRICULUM.length;i++) if(CURRICULUM[i].n===n) return CURRICULUM[i].title;
+  return "סשן " + n;
+}
+function sessionPlayable(n){
+  return !!getBankSession(n);
+}
+
+function enqueueReview(q){
+  var id = q.id;
+  var exists = false;
+  for(var i=0;i<db.reviewBank.length;i++){
+    if(db.reviewBank[i].id === id){ exists = true; break; }
+  }
+  if(!exists){
+    db.reviewBank.push({
+      id: q.id, type: q.type, prompt_he: q.prompt_he, stimulus_ar: q.stimulus_ar,
+      answer: q.answer, options: (q.options || []).slice(), gloss_he: q.gloss_he || "",
+      skills: (q.skills || []).slice(), fromSession: play.curriculum
+    });
+  }
+}
+function takeReviews(max){
+  var out = [];
+  while(out.length < max && db.reviewBank.length){
+    out.push(db.reviewBank.shift());
+  }
+  return out;
+}
+
+function shuffle(arr){
+  var a = arr.slice();
+  for(var i=a.length-1;i>0;i--){
+    var j = Math.floor(Math.random()*(i+1));
+    var t=a[i]; a[i]=a[j]; a[j]=t;
+  }
+  return a;
+}
+function looksArabic(s){
+  return /[\u0600-\u06FF]/.test(String(s||""));
+}
+function buildQueue(curriculumNum){
+  var bs = getBankSession(curriculumNum);
+  if(!bs) return [];
+  var base = bs.questions.slice();
+  var reviews = takeReviews(4);
+  var queue = [];
+  var used = {};
+  reviews.forEach(function(r){
+    queue.push(r);
+    used[r.id] = true;
+  });
+  for(var i=0;i<base.length && queue.length < SESSION_SIZE; i++){
+    if(used[base[i].id]) continue;
+    if(reviews.length){
+      var sk = base[i].skills || [];
+      if(base[i].type === "review" || base[i].type === "interleave" || sk.indexOf("review")>=0){
+        if(queue.length + (base.length - i) > SESSION_SIZE) continue;
+      }
+    }
+    queue.push(base[i]);
+    used[base[i].id] = true;
+  }
+  for(var j=0;j<base.length && queue.length < SESSION_SIZE; j++){
+    if(used[base[j].id]) continue;
+    queue.push(base[j]);
+    used[base[j].id] = true;
+  }
+  return queue.slice(0, SESSION_SIZE);
+}
+
+var play = {
+  curriculum: 1, queue: [], idx: 0, correct: 0, best: 0, streak: 0,
+  weak: [], locked: false, sessionRec: null, started: 0
+};
+var PRAISE = ["מדויק!","נכון מאוד!","כל הכבוד!","יפה!","בדיוק!","אלופה!"];
+
+function startSession(curriculumNum){
+  if(!sessionPlayable(curriculumNum)){
+    window.alert("סשן " + curriculumNum + " עדיין לא זמין — בקרוב נוסיף תוכן.");
+    return;
+  }
+  if(curriculumNum > db.unlockedSession){
+    window.alert("סשן זה עדיין נעול. סיימי קודם את הסשנים הקודמים.");
+    return;
+  }
+  play.curriculum = curriculumNum;
+  play.queue = buildQueue(curriculumNum);
+  play.idx = 0;
+  play.correct = 0;
+  play.best = 0;
+  play.streak = 0;
+  play.weak = [];
+  play.locked = false;
+  play.started = Date.now();
+  play.sessionRec = {
+    start: play.started, last: play.started, ms: 0,
+    q: 0, correct: 0, best: 0,
+    curriculum: curriculumNum,
+    title: curriculumTitle(curriculumNum),
+    weak: []
+  };
+  db.sessions.push(play.sessionRec);
+  db.lastCurriculum = curriculumNum;
+  save();
+  document.getElementById("sessNum").textContent = String(curriculumNum);
+  show("practice");
+  renderQuestion();
+}
+
+function touchSession(){
+  var now = Date.now(), s = play.sessionRec;
+  if(!s) return;
+  var dt = now - s.last;
+  if(dt > 0 && dt < 60000) s.ms += dt;
+  s.last = now;
+}
+
+function currentQ(){ return play.queue[play.idx]; }
+
+function renderQuestion(){
+  var q = currentQ();
+  if(!q){ finishSession(); return; }
+  play.locked = false;
+  document.getElementById("sProg").textContent = (play.idx + 1) + "/" + SESSION_SIZE;
+  document.getElementById("progFill").style.width = Math.round(100 * play.idx / SESSION_SIZE) + "%";
+  document.getElementById("sStreak").textContent = String(play.streak);
+  document.getElementById("sAcc").textContent = play.sessionRec.q ? Math.round(100*play.sessionRec.correct/play.sessionRec.q)+"%" : "—";
+  document.getElementById("qPrompt").textContent = q.prompt_he || "";
+  var stim = document.getElementById("qStim");
+  if(q.type === "translate_he_ar"){
+    stim.textContent = "؟";
+  } else {
+    stim.textContent = q.stimulus_ar || "";
+  }
+  var gloss = document.getElementById("qGloss");
+  if(q.type === "translate_ar_he" || q.type === "translate_he_ar"){
+    gloss.textContent = "";
+  } else {
+    gloss.textContent = q.gloss_he ? ("עזרה: " + q.gloss_he) : "";
+  }
+  document.getElementById("msg").textContent = "";
+  document.getElementById("msg").className = "msg";
+
+  var opts = document.getElementById("opts");
+  opts.innerHTML = "";
+  var choices = shuffle(q.options || []);
+  choices.forEach(function(opt){
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "opt" + (looksArabic(opt) ? " ar" : "");
+    b.textContent = opt;
+    b.addEventListener("click", function(){ chooseAnswer(opt, b); });
+    opts.appendChild(b);
+  });
+}
+
+function chooseAnswer(opt, btn){
+  if(play.locked) return;
+  play.locked = true;
+  var q = currentQ();
+  touchSession();
+  var f = fact(q.id);
+  f.label = (q.stimulus_ar || "") + " · " + (q.answer || "");
+  f.stim = q.stimulus_ar || "";
+  f.seen++;
+  play.sessionRec.q++;
+  db.answers++;
+
+  var ok = String(opt) === String(q.answer);
+  var buttons = document.querySelectorAll("#opts .opt");
+  buttons.forEach(function(el){
+    el.classList.add("dim");
+    if(String(el.textContent) === String(q.answer)) el.classList.add("ok");
+  });
+  if(btn){
+    btn.classList.remove("dim");
+    btn.classList.add(ok ? "ok" : "no");
+  }
+
+  var msg = document.getElementById("msg");
+  if(ok){
+    f.correct++; f.streak++;
+    play.correct++; play.streak++;
+    play.sessionRec.correct++;
+    if(play.streak > play.best) play.best = play.streak;
+    if(play.best > play.sessionRec.best) play.sessionRec.best = play.best;
+    msg.className = "msg ok";
+    msg.textContent = PRAISE[Math.floor(Math.random()*PRAISE.length)];
+    if(q.gloss_he) msg.innerHTML += "<small>" + escapeHtml(q.gloss_he) + "</small>";
+  } else {
+    f.wrong++; f.streak = 0; f.lastWrongAt = db.answers;
+    play.streak = 0;
+    play.weak.push({ id:q.id, stim:q.stimulus_ar, answer:q.answer, prompt:q.prompt_he, gloss:q.gloss_he||"" });
+    play.sessionRec.weak = play.weak.slice();
+    enqueueReview(q);
+    msg.className = "msg no";
+    var dir = looksArabic(q.answer) ? "rtl" : "rtl";
+    msg.innerHTML = "כמעט! התשובה: <span style=\"unicode-bidi:isolate;direction:" + dir + "\">" +
+      escapeHtml(q.answer) + "</span>" +
+      (q.gloss_he ? "<small>" + escapeHtml(q.gloss_he) + "</small>" : "<small>נחזור לזה בעוד מעט</small>");
+  }
+
+  document.getElementById("sProg").textContent = (play.idx + 1) + "/" + SESSION_SIZE;
+  document.getElementById("progFill").style.width = Math.round(100 * (play.idx + 1) / SESSION_SIZE) + "%";
+  document.getElementById("sStreak").textContent = String(play.streak);
+  document.getElementById("sAcc").textContent = Math.round(100*play.sessionRec.correct/play.sessionRec.q) + "%";
+
+  save({immediate:true});
+
+  var delay = ok ? 750 : 1400;
+  setTimeout(function(){
+    play.idx++;
+    if(play.idx >= SESSION_SIZE || play.idx >= play.queue.length){
+      finishSession();
+    } else {
+      renderQuestion();
+    }
+  }, delay);
+}
+
+function escapeHtml(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+function finishSession(){
+  var acc = play.sessionRec.q ? play.sessionRec.correct / play.sessionRec.q : 0;
+  if(play.sessionRec.q >= SESSION_SIZE){
+    db.unlockedSession = Math.min(20, Math.max(db.unlockedSession, play.curriculum + 1));
+  }
+  save({immediate:true});
+
+  document.getElementById("sumSess").textContent = String(play.curriculum);
+  document.getElementById("sumTitle").textContent = acc >= 0.8 ? "אלופה! 🌟" : (acc >= 0.6 ? "כל הכבוד!" : "יפה שהתאמנת — נחזק ביחד");
+  document.getElementById("sumScore").textContent = play.sessionRec.correct + " מתוך " + play.sessionRec.q;
+  document.getElementById("sumAcc").textContent = Math.round(100*acc) + "%";
+  document.getElementById("sumBest").textContent = String(play.sessionRec.best);
+
+  var ul = document.getElementById("sumWeak");
+  ul.innerHTML = "";
+  if(!play.weak.length){
+    ul.innerHTML = "<li style=\"color:var(--mint)\">בלי טעויות בסשן הזה 🎉</li>";
+  } else {
+    play.weak.forEach(function(w){
+      var li = document.createElement("li");
+      li.innerHTML = "<span class=\"ar\">" + escapeHtml(w.stim || "") + "</span> → " + escapeHtml(w.answer || "") +
+        (w.gloss ? " <span style=\"color:var(--muted)\">(" + escapeHtml(w.gloss) + ")</span>" : "");
+      ul.appendChild(li);
+    });
+  }
+  show("summary");
+}
+
+function reportText(){
+  var s = play.sessionRec;
+  if(!s || !s.q) return null;
+  var lines = [];
+  lines.push("דוח תרגול ערבית — אמיליה");
+  lines.push("סשן " + s.curriculum + ": " + (s.title || curriculumTitle(s.curriculum)));
+  lines.push(fmtDate(s.start) + " בשעה " + fmtTime(s.start));
+  lines.push("זמן תרגול: " + fmtDur(s.ms));
+  lines.push("שאלות: " + s.q);
+  lines.push("נכון: " + s.correct + " (" + Math.round(100*s.correct/s.q) + "%)");
+  lines.push("רצף מקסימלי: " + s.best);
+  if(s.weak && s.weak.length){
+    lines.push("");
+    lines.push("לחיזוק:");
+    s.weak.forEach(function(w){
+      lines.push("• " + (w.stim||"") + " → " + (w.answer||""));
+    });
+  } else {
+    lines.push("");
+    lines.push("בלי טעויות בכלל 🎉");
+  }
+  return lines.join("\n");
+}
+
+function pad2(n){ return (n<10?"0":"") + n; }
+function fmtDate(ts){ var d = new Date(ts); return pad2(d.getDate())+"/"+pad2(d.getMonth()+1)+"/"+d.getFullYear(); }
+function fmtTime(ts){
+  var d = new Date(ts);
+  try{
+    return new Intl.DateTimeFormat("he-IL", { timeZone:"Asia/Jerusalem", hour:"2-digit", minute:"2-digit", hour12:false }).format(d);
+  }catch(e){
+    return pad2(d.getHours())+":"+pad2(d.getMinutes());
+  }
+}
+function fmtDur(ms){
+  var m = Math.round(ms/60000);
+  if(m < 1) return "פחות מדקה";
+  if(m < 60) return m + " דק׳";
+  return Math.floor(m/60) + " שע׳ " + (m%60) + " דק׳";
+}
+function hardest(n){
+  var arr = [];
+  for(var k in db.facts){
+    var f = db.facts[k];
+    if(f.wrong > 0) arr.push({k:k, wrong:f.wrong, seen:f.seen, correct:f.correct, label:f.label||k, stim:f.stim||""});
+  }
+  arr.sort(function(x,y){
+    if(y.wrong !== x.wrong) return y.wrong - x.wrong;
+    return (x.correct/(x.seen||1)) - (y.correct/(y.seen||1));
+  });
+  return arr.slice(0,n);
+}
+
+var scr = {
+  home: document.getElementById("home"),
+  practice: document.getElementById("practice"),
+  summary: document.getElementById("summary"),
+  pin: document.getElementById("pinScreen"),
+  parent: document.getElementById("parent")
+};
+function show(name){
+  for(var k in scr) scr[k].classList.add("hidden");
+  scr[name].classList.remove("hidden");
+  if(name === "home") refreshHome();
+}
+
+function refreshHome(){
+  document.getElementById("curSessLabel").textContent = String(db.unlockedSession);
+  document.getElementById("homeHint").textContent =
+    "סשן פתוח: " + db.unlockedSession + " — " + curriculumTitle(db.unlockedSession) +
+    (sessionPlayable(db.unlockedSession) ? "" : " (תוכן מלא לסשנים 1–10; אחר כך נוסיף)");
+  var pick = document.getElementById("sessPick");
+  pick.innerHTML = "";
+  CURRICULUM.forEach(function(c){
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "sess-btn";
+    var locked = c.n > db.unlockedSession;
+    var playable = sessionPlayable(c.n);
+    btn.disabled = locked || !playable;
+    btn.innerHTML = "סשן " + c.n + ": " + escapeHtml(c.title) +
+      "<small>" + (locked ? "🔒 נעול" : (playable ? "פתוח · 15 שאלות" : "מבנה מוכן — תוכן בקרוב")) + "</small>";
+    if(!locked && playable){
+      btn.addEventListener("click", function(){
+        document.getElementById("pickPanel").classList.add("hidden");
+        startSession(c.n);
+      });
+    }
+    pick.appendChild(btn);
+  });
+}
+
+document.getElementById("btnStartCurrent").addEventListener("click", function(){
+  var n = db.unlockedSession || 1;
+  if(!sessionPlayable(n)){
+    for(var i=Math.min(n,10); i>=1; i--){
+      if(sessionPlayable(i)){ n=i; break; }
+    }
+  }
+  startSession(n);
+});
+document.getElementById("btnPickSession").addEventListener("click", function(){
+  document.getElementById("pickPanel").classList.toggle("hidden");
+  refreshHome();
+});
+document.getElementById("btnQuit").addEventListener("click", function(){
+  if(play.sessionRec && play.sessionRec.q > 0){
+    if(!window.confirm("לצאת באמצע הסשן? ההתקדמות עד כה תישמר.")) return;
+    save({immediate:true});
+  } else if(play.sessionRec && play.sessionRec.q === 0){
+    var ix = db.sessions.indexOf(play.sessionRec);
+    if(ix>=0) db.sessions.splice(ix,1);
+    save();
+  }
+  show("home");
+});
+document.getElementById("btnSumHome").addEventListener("click", function(){ show("home"); });
+document.getElementById("btnNewSession").addEventListener("click", function(){
+  var next = db.unlockedSession || play.curriculum || 1;
+  if(!sessionPlayable(next)) next = play.curriculum;
+  startSession(next);
+});
+document.getElementById("btnReport").addEventListener("click", function(){
+  var t = reportText();
+  if(!t){ window.alert("אין דוח עדיין"); return; }
+  window.open("https://wa.me/?text=" + encodeURIComponent(t), "_blank");
+});
+document.getElementById("btnCopy").addEventListener("click", function(){
+  var t = reportText();
+  if(!t){ window.alert("אין דוח עדיין"); return; }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(function(){ window.alert("הדוח הועתק"); }, function(){ window.prompt("העתיקי:", t); });
+  } else window.prompt("העתיקי:", t);
+});
+
+function openPin(){
+  document.getElementById("pinInput").value = "";
+  document.getElementById("pinNote").textContent = "ארבע ספרות";
+  show("pin");
+  setTimeout(function(){ document.getElementById("pinInput").focus(); }, 60);
+}
+document.getElementById("btnParentHome").addEventListener("click", openPin);
+document.getElementById("btnPinBack").addEventListener("click", function(){ show("home"); });
+document.getElementById("pinInput").addEventListener("input", function(e){
+  var v = e.target.value.replace(/\D/g,"").slice(0,4);
+  e.target.value = v;
+  if(v.length === 4){
+    if(v === PIN){
+      cloudPull().then(function(){
+        buildParent();
+        show("parent");
+        save({immediate:true});
+      });
+    } else {
+      document.getElementById("pinNote").textContent = "קוד לא נכון";
+      e.target.value = "";
+    }
+  }
+});
+document.getElementById("btnBack").addEventListener("click", function(){ show("home"); });
+document.getElementById("btnReset").addEventListener("click", function(){
+  if(window.confirm("לאפס את כל נתוני הערבית של אמיליה? אין דרך לשחזר.")){
+    db = blank();
+    save({immediate:true});
+    buildParent();
+  }
+});
+
+function buildParent(){
+  var host = document.getElementById("parentBody");
+  var real = db.sessions.filter(function(s){ return s.q > 0; });
+  var syncNote = cloudConfigured() ? "סנכרון ענן פעיל (emilia-arabic)" : "ענן לא מוגדר";
+  if(!real.length){
+    host.innerHTML = '<div class="panel"><div class="empty">עדיין אין סשנים.<br>אחרי שאמיליה תתרגל, יופיעו כאן הרשימה, הדיוק והפריטים הקשים.<br><br>' + syncNote + '</div></div>';
+    return;
+  }
+  var tq=0, tc=0, tms=0;
+  real.forEach(function(s){ tq+=s.q; tc+=s.correct; tms+=s.ms; });
+  var h = '<div class="panel"><h2>סך הכול</h2><table>';
+  h += '<tr><th>סשנים</th><td>' + real.length + '</td></tr>';
+  h += '<tr><th>שאלות</th><td>' + tq + '</td></tr>';
+  h += '<tr><th>אחוז הצלחה</th><td>' + Math.round(100*tc/tq) + '%</td></tr>';
+  h += '<tr><th>זמן מצטבר</th><td>' + fmtDur(tms) + '</td></tr>';
+  h += '<tr><th>סשן פתוח</th><td>' + db.unlockedSession + ' — ' + escapeHtml(curriculumTitle(db.unlockedSession)) + '</td></tr>';
+  h += '<tr><th>בנק חזרה</th><td>' + (db.reviewBank||[]).length + ' פריטים</td></tr>';
+  h += '<tr><th>סנכרון</th><td>' + syncNote + '</td></tr>';
+  h += '</table></div>';
+
+  h += '<h3>רשימת סשנים</h3><div class="panel"><table>';
+  h += '<tr><th>תאריך</th><th>סשן</th><th>זמן</th><th>נכון</th><th>הצלחה</th></tr>';
+  real.slice().reverse().slice(0,30).forEach(function(s){
+    h += '<tr><td>' + fmtDate(s.start) + '</td><td>' + (s.curriculum||"?") +
+         '</td><td>' + fmtDur(s.ms) + '</td><td>' + s.correct + '/' + s.q +
+         '</td><td>' + Math.round(100*s.correct/s.q) + '%</td></tr>';
+  });
+  h += '</table></div>';
+
+  var hard = hardest(10);
+  h += '<h3>הפריטים הקשים ביותר</h3><div class="panel">';
+  if(hard.length){
+    h += '<div class="hard">';
+    hard.forEach(function(x){
+      h += '<span>' + escapeHtml(x.stim || x.label) + ' · ' + x.wrong + ' טעויות</span>';
+    });
+    h += '</div>';
+  } else {
+    h += '<div class="empty">אין פריטים עם טעויות — הכול נכון עד כה.</div>';
+  }
+  h += '</div>';
+  host.innerHTML = h;
+}
+
+syncEls = [
+  document.getElementById("syncStatus"),
+  document.getElementById("syncStatus2"),
+  document.getElementById("syncStatus3")
+];
+cloudPull().then(function(){
+  refreshHome();
+  show("home");
+});
+</script>
+</body>
+</html>
